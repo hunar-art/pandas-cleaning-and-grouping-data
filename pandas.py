@@ -22,13 +22,13 @@ def items_report():
 
         so_df = pd.DataFrame(so_dic['value'])
         
-        so_df_sanmar = so_df[so_df['AccountName'] == 'S&S Activewear']
+        so_df_sns = so_df[so_df['AccountName'] == 'S&S Activewear']
         
         required_columns = ['AlternateID', 'SOColor', 'SOSize', 'InventoryID', 'Qty', 'OrderNbr']
-        if not all(col in so_df_sanmar.columns for col in required_columns):
+        if not all(col in so_df_sns.columns for col in required_columns):
             return "Missing one or more required columns in the data"
 
-        so_df_sanmar['Info'] = so_df_sanmar.apply(
+        so_df_sns['Info'] = so_df_sns.apply(
             lambda row: '--'.join([
                 str(row['AlternateID']),
                 str(row['SOColor']),
@@ -38,7 +38,7 @@ def items_report():
             ]), axis=1
         )
         
-        grpby_po = so_df_sanmar.groupby('OrderNbr').agg(
+        grpby_po = so_df_sns.groupby('OrderNbr').agg(
             Info=('Info', lambda x: '|'.join(x)),
             TotalQty=('Qty', 'sum')
         ).reset_index()
